@@ -1,0 +1,19 @@
+# Verified development environment; do not include in final submission ZIP.
+# Install CUDA PyTorch from its official matching index if rebuilding on another PC.
+torch==2.14.1+cu132
+torchvision==0.29.1+cu132
+setfit==1.2.0
+sentence-transformers==6.2.0
+transformers==5.22.1
+datasets==5.1.0
+accelerate==1.15.0
+huggingface-hub==2.4.0
+evaluate==0.4.6
+scikit-learn==1.9.1
+pandas==3.0.6
+numpy==2.4.6
+scipy==1.17.1
+matplotlib==3.11.2
+seaborn==0.13.2
+ipykernel==7.3.0
+jupyterlab==4.6.4

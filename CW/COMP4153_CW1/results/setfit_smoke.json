@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "device": "cuda:0",
+  "training_steps": 1,
+  "prediction_count": 2,
+  "note": "Synthetic random tiny BERT; no pretrained model download or research performance validation."
+}

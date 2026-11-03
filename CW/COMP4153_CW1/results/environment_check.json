@@ -1,0 +1,88 @@
+{
+  "python": "3.11.17 | packaged by Anaconda, Inc. | (main, Oct  1 2026, 20:16:54) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "C:\\APP\\Anaconda\\envs\\py3\\python.exe",
+  "packages": {
+    "torch": {
+      "version": "2.14.1+cu132",
+      "import": "PASS"
+    },
+    "torchvision": {
+      "version": "0.29.1+cu132",
+      "import": "PASS"
+    },
+    "setfit": {
+      "version": "1.2.0",
+      "import": "PASS"
+    },
+    "sentence-transformers": {
+      "version": "6.2.0",
+      "import": "PASS"
+    },
+    "transformers": {
+      "version": "5.22.1",
+      "import": "PASS"
+    },
+    "datasets": {
+      "version": "5.1.0",
+      "import": "PASS"
+    },
+    "accelerate": {
+      "version": "1.15.0",
+      "import": "PASS"
+    },
+    "evaluate": {
+      "version": "0.4.6",
+      "import": "PASS"
+    },
+    "scikit-learn": {
+      "version": "1.9.1",
+      "import": "PASS"
+    },
+    "pandas": {
+      "version": "3.0.6",
+      "import": "PASS"
+    },
+    "numpy": {
+      "version": "2.4.6",
+      "import": "PASS"
+    },
+    "matplotlib": {
+      "version": "3.11.2",
+      "import": "PASS"
+    },
+    "seaborn": {
+      "version": "0.13.2",
+      "import": "PASS"
+    },
+    "ipykernel": {
+      "version": "7.3.0",
+      "import": "PASS"
+    },
+    "jupyterlab": {
+      "version": "4.6.4",
+      "import": "PASS"
+    }
+  },
+  "pip_check": {
+    "returncode": 0,
+    "output": "No broken requirements found.\n"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "runtime": "13.2",
+    "capability": [
+      12,
+      0
+    ],
+    "architectures": [
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90",
+      "sm_100",
+      "sm_120"
+    ],
+    "forward_backward": "PASS",
+    "vram_bytes": 8546484224
+  }
+}
