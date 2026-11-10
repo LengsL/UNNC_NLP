@@ -1,3 +1,7 @@
+# Historical setup snapshot (2026-11-03)
+
+Use the README for current entry points and completion scope.
+
 # 项目初始化检查记录
 
 检查日期：2026-11-03。

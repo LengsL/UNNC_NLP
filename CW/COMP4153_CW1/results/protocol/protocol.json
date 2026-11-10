@@ -1,0 +1,44 @@
+{
+  "normalization": "strip/collapse whitespace and Unicode casefold; punctuation retained",
+  "seed": 42,
+  "shots_per_class": 8,
+  "banking_validation_fraction": 0.1,
+  "banking_train_vs_test": {
+    "left": "banking_train",
+    "right": "protected",
+    "matching_pairs": 7,
+    "unique_texts": 7,
+    "left_rows": 7,
+    "right_rows": 7,
+    "conflicting_pairs": 0
+  },
+  "banking_pool_vs_validation": {
+    "left": "banking_pool",
+    "right": "protected",
+    "matching_pairs": 0,
+    "unique_texts": 0,
+    "left_rows": 0,
+    "right_rows": 0,
+    "conflicting_pairs": 0
+  },
+  "clinc_train_vs_validation": {
+    "left": "clinc_train",
+    "right": "protected",
+    "matching_pairs": 3,
+    "unique_texts": 3,
+    "left_rows": 3,
+    "right_rows": 3,
+    "conflicting_pairs": 2
+  },
+  "clinc_train_vs_test_after_validation": {
+    "left": "clinc_train",
+    "right": "protected",
+    "matching_pairs": 2,
+    "unique_texts": 2,
+    "left_rows": 2,
+    "right_rows": 2,
+    "conflicting_pairs": 2
+  },
+  "clinc_original_sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0",
+  "note": "Review matched texts; reuse saved source IDs and text hashes across all baselines. CLINC unknown extra null rows excluded because original in-domain data is used."
+}

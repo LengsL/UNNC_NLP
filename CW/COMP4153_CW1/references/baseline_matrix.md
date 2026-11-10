@@ -1,11 +1,15 @@
-# Baseline screening matrix
+# Few-shot intent classification: baseline screening (2026-11-10)
 
-Task: Few-Shot Intent Classification
+Candidates only. A paper and repository check is not a local training test. No claim is made that these all run on 8 GB or are automatically comparable; review original settings, licensing, software versions, permitted AI use, and do an isolated smoke test. Do not use held-out test data for adaptation. Five distinct methods must be individually evaluated on both datasets, and reported results must be your own.
 
-Candidate datasets: BANKING77; CLINC150 (in-domain; keep OOS separate).
+| Candidate | Original paper | Author code | Initial assessment and unresolved risks | Verification |
+|---|---|---|---|---|
+| SetFit (2022) | [Tunstall et al.](https://arxiv.org/abs/2209.11055) | [huggingface/setfit](https://github.com/huggingface/setfit) | Sentence-pair contrastive learning followed by classifier. | BANKING77 GPU pilot completed; CLINC150 still untested. |
+| AncSetFit (2023) | [Pauli et al., EMNLP](https://aclanthology.org/2023.emnlp-main.692/) | [AncSetfit](https://github.com/AmaliePauli/AncSetfit) | Semantic label anchors add label information; define equivalent label names and explain extra inputs. | Paper cites repository; repository page timed out during review; dependencies and local execution unverified. |
+| FastFit (2024) | [Yehudai and Bandel, NAACL](https://aclanthology.org/2024.naacl-demo.18/) | [IBM/fastfit](https://github.com/IBM/fastfit) | Batch contrastive / label text method designed for many classes; label names and evaluation protocol need consistent treatment. | Paper and code/CLI verified. Repository is archived; compatibility, memory and local execution pending. |
+| DFT+ (2023) | [Zhang et al., Findings ACL](https://aclanthology.org/2023.findings-acl.706/) | [DFTPlus](https://github.com/hdzhang-code/DFTPlus) | Direct fine-tuning using contextual augmentation and sequential self-distillation. Generation and distillation settings need an explicit resource and data-access review. | Original ACL paper and non-empty author repository verified. Context augmentation and sequential distillation code are present; local execution pending. |
+| MICL (2024) | [Original article](https://doi.org/10.1016/j.asoc.2024.112338) | [YS19999/MICL](https://github.com/YS19999/MICL) | Mutual information and contrastive approach to few-shot intent detection; episodic assumptions may differ from closed-set 8-shot protocol. | Original article and non-empty author repository verified. README still says further source will be published; completeness and local execution remain unverified. |
 
-| Method | Original paper/year | Code | Distinct contribution | Fits recent-five-year rule? | Status |
-|---|---|---|---|---|---|
-| SetFit | https://arxiv.org/abs/2209.11055 (2022) | https://github.com/huggingface/setfit | To review | To verify | Pilot candidate |
+Decision gate: student should inspect each primary paper and code, explicitly establish the method is distinct, check train/validation inputs and required external data, and test each candidate in a separate environment before treating it as a feasible baseline. None besides SetFit has yet run here. If episodic unseen-class assumptions require extra labeled classes or other data, disclose or replace rather than introduce unequal data access.
 
-Select four further distinct recent methods after literature review.
+All five paper years are 2022–2024, within the recent-five-year window at the October 2026 issue date. This is preliminary screening. AncSetFit repository contents and MICL completeness need resolving before baseline implementation. The phase-one gate does not require running the four additional candidates.

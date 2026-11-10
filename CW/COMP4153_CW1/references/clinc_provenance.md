@@ -1,0 +1,7 @@
+# CLINC150 missing-label provenance
+
+DeepPavlov's [dataset card](https://huggingface.co/datasets/DeepPavlov/clinc150) says it reformats [cmaldona/All-Generalization-OOD-CLINC150](https://huggingface.co/datasets/cmaldona/All-Generalization-OOD-CLINC150). The upstream [README](https://huggingface.co/datasets/cmaldona/All-Generalization-OOD-CLINC150/blob/main/README.md) says its training split contains CLINC150 in-domain, CLINC150 near-OOD, and Yelp far-OOD examples. Its conversion assigns missing integer labels to its OOD samples.
+
+Observed local counts: 200 null labels in the converted training split; 100 text rows match the original CLINC oos_train and the remaining 100 do not occur in any split of the local CLINC data_full.json. Their review-style texts and the upstream README suggest that the extra rows may be Yelp far-OOD. This has NOT been established by row-level comparison, so it is an inference, not a verified identity.
+
+The present closed-set protocol uses the original named CLINC in-domain data, excludes all external null-label rows, preserves its official validation/test splits, and checks the 150-ID mapping. To verify the remaining 100 rigorously, compare each text and upstream generalisation/label fields against the exact upstream dataset revision, including duplicate counts. Record the revision and any mismatches. Four train/protected overlaps have conflicting labels; preserve protected splits and retain the audit CSVs for review.
