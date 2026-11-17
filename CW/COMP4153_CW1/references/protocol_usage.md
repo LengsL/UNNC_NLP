@@ -1,7 +1,9 @@
-# Reuse the fixed splits
+# Inline protocol and notebook-only results
 
-Run `notebooks/01_dataset_exploration.ipynb` to prepare or verify the seed-42 manifests in `results/protocol/`. Start Jupyter in the project or `notebooks/` directory.
+01/02/03 share identical build_protocol code, normalization, original-row Source IDs and split/shot rules. 01 keeps the original seed-42 independent 8-shot manifest fingerprints inside its final cell; it no longer exports or reads 14 audit files. New seeds/K remain valid in experiment notebooks.
 
-The first code cell of `notebooks/02_setfit_banking77_pilot.ipynb` loads BANKING77 and restores the saved sample order by `source_id`. It verifies labels, normalized-text hashes, disjoint splits and the 8-shot counts. `fewshot_train` is the training dataset and `bank_val` is the validation frame. The pilot reads the official test manifest for the overlap audit.
+BANKING77 defaults to the cleaned full pool with fixed stratified validation; CLINC150 uses 14,995 cleaned training rows, official 3,000 Validation and 4,500 Test rows, and 150 intent names. CLINC IDs index original in-domain JSON rows, never cleaned-row positions. OOS and unconfirmed converted extras are excluded as before.
 
-For CLINC150, use the original `data/clinc150/data_full.json` with the `clinc150_*.csv` manifests. Resolve `clinc_train_<i>`, `clinc_validation_<i>`, and `clinc_test_<i>` from `train`, `val`, and `test` respectively. Use the verified `clinc150_id_to_name.json` for integer labels. Preserve manifest order and check labels and text hashes before fitting each baseline.
+Metrics and tables are displayed and retained in memory, not CSV/JSON files. Each run returns summary with its scalar metrics, settings, versions, protocol metadata, predictions and errors. Repeated-seed summaries use run_ids instead of references to nonexistent files. Final Test diagnostics are gated by explicit authorization. Full Pool stays the main condition; low-resource analyses stay optional.
+
+Final ZIP contains only executed method–dataset notebooks; this document, 01 and cached source data remain development resources.

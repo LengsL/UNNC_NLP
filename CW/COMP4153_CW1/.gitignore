@@ -16,3 +16,5 @@ notebooks/used/
 notebooks/results/
 results/setfit_pilot/
 references/*_before_*.md
+
+results/*_training/

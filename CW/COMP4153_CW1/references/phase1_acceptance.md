@@ -1,3 +1,7 @@
+# Historical phase-one acceptance
+
+This record applies to the earlier 8-shot validation pilot and is retained as history. Current defaults are full-pool training and Validation; see README and repair_acceptance.md for 2026-11-17 P0→P1→P2 acceptance.
+
 # Phase-one engineering acceptance
 
 Accepted after the final independent-kernel run on 2026-11-11.

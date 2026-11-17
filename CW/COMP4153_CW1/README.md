@@ -1,17 +1,16 @@
-# COMP4153 CW1 · Few-shot intent classification
+# COMP4153 CW1 — development workspace
 
-Use the `py3` environment and start Jupyter in this directory or `notebooks/`.
+Run notebooks independently from the project root or notebooks/. All functions are inline. Data/model downloads may require network access; caches can be prepared for offline use. CLINC original JSON is read locally if available, otherwise downloaded in memory and checked by SHA256.
 
-1. Run [01 · Dataset exploration](notebooks/01_dataset_exploration.ipynb) to review the dataset statistics and verify the fixed split and 8-shot manifests in `results/protocol/`.
-2. Run [02 · BANKING77 SetFit pilot](notebooks/02_setfit_banking77_pilot.ipynb) to train on the fixed sample and evaluate on validation. The pilot saves metrics in `results/metrics/` and errors in `results/predictions/`.
-3. Use [the baseline screening matrix](references/baseline_matrix.md) and [the fixed-split instructions](references/protocol_usage.md) when testing other methods.
+- 01 audits both datasets and displays fixed protocol fingerprints, statistics, overlaps and label mapping in cells. No protocol files are exported.
+- 02 runs SetFit on BANKING77 only; 03 runs SetFit on CLINC150 only. Default Full Pool and Validation evaluation; optional analyses remain disabled. Explicit Test evaluation requires EVALUATION_SPLIT="test" and FINAL_TEST=True.
+- Metrics, training settings, versions, predictions, errors and authorized Test diagnostics are displayed in notebook cells and retained in memory. No result CSV/JSON files are exported. Trainer work directories are temporary; checkpoints remain disabled.
+- Existing genuine experiment outputs are retained. The new display code has not been trained again. A concurrently saved 03 run is retained, including its batch_size=64 setting and genuine CLINC150 Validation outputs; these must be considered when comparing training settings across methods. Run each final notebook from top to bottom and retain outputs before submission.
 
-These are development notebooks. For Moodle, prepare the required independently runnable method–dataset notebooks with their executed outputs and embedded setup and data-loading logic.
+## Final submission
 
-## Environment and first run
+Submit Name_ID.pdf separately from Name_ID_source.zip. The ZIP must contain at least 12 executed, independent notebooks: five existing methods plus the proposed method, each on BANKING77 and CLINC150. Use Name_ID_MethodName_DatasetName.ipynb. More existing methods require additional notebooks. 01 is a development audit and is not one of the 12 experiments. FastFit/Method3–5/Proposed notebooks must contain actual implementations and results before inclusion; they are not fabricated here.
 
-Activate Anaconda `py3` and launch `python -m jupyterlab` in this directory. The verified interpreter is `C:/APP/Anaconda/envs/py3/python.exe`. `requirements.txt` records the tested versions. Recreating its CUDA PyTorch build requires the matching official PyTorch wheel index.
+Do not package datasets, weights, caches, separate .py files, README, requirements.txt, environment.yml or other source files. This development workspace may retain documentation and the original data cache; these are excluded from the submission ZIP. The written paper requires at least one appendix output page per method–dataset experiment (minimum 12).
 
-Run 01 first. It downloads the original CLINC JSON into `data/clinc150/` if absent and verifies its SHA256. Hugging Face Datasets downloads BANKING77 and the converted CLINC audit data. Run 02 next to load the model and train. Initial downloads require internet access. Once cached, `HF_HUB_OFFLINE=1` and `HF_DATASETS_CACHE` pointing to the prepared cache support offline verification and avoid Hub retries. These are runtime environment options, not changes to model settings.
-
-Phase one covers data integrity, fixed sampling, one BANKING77 SetFit pilot and five-method preliminary screening. Other methods and the CLINC SetFit experiment are next-phase tasks. The complete coursework requires five existing methods plus the proposed approach on both datasets, an academic paper and appendix evidence. The duplicate policy follows the teacher's reply by retaining official protected splits and removing overlapping training samples.
+Historical acceptance documents describe the earlier file-export workflow. The current notebook-only workflow supersedes their output-path and frozen-file requirements; data/sampling/training rules remain unchanged. Earlier generated CSV/JSON evidence is archived outside this project before removal. Cite external data/models/code and include the required AI usage declaration.
