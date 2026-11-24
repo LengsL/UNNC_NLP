@@ -1,0 +1,47 @@
+**LoRA 适合作为第三种 Existing Method，技术可行性已通过 GPU 验证。** 它在 RoBERTa 的注意力层加入低秩更新，并与分类头一起训练。SetFit 使用句向量对比学习再训练分类器，FastFit 使用 batch 对比学习和类别文本相似度。三者有可说明的技术差异。 [LoRA 原论文](https://arxiv.org/abs/2106.09685) · [SetFit 原论文](https://arxiv.org/abs/2209.11055) · [FastFit 原论文](https://aclanthology.org/2024.naacl-demo.18/)
+
+我在独立诊断环境安装了 **PEFT 0.13.2**，实测兼容 Transformers 4.44.2、Accelerate 0.34.2 和 PyTorch 2.11.0+cu128。使用官方 `LoraConfig`、`TaskType.SEQ_CLS` 和 `get_peft_model()`，确认 RoBERTa-base 的 12 层共有 24 个 `query` / `value` 投影接受了 LoRA，`classifier` 参与训练。`r=8`、`alpha=16` 和 dropout `0.05` 是本次探针配置，正式配置仍需通过 Validation 确定。 [PEFT 0.13.2 官方实现](https://github.com/huggingface/peft/tree/v0.13.2) · [PEFT 分类头说明](https://huggingface.co/docs/peft/developer_guides/troubleshooting)
+
+| 合成输入 GPU 探针 | Logits 形状 | 可训练参数／总参数 | 峰值显存 |
+|---|---:|---:|---:|
+| 77 类 | `4 × 77` | 944,717／125,649,562（0.7519%） | 516.5 MiB |
+| 150 类 | `4 × 150` | 1,000,854／125,761,836（0.7958%） | 517.5 MiB |
+
+两组 loss 均为有限值，Adapter 和分类头都有有效梯度，且在一步更新后都发生了变化。另用官方 Trainer 完成了 77 类合成单步训练，耗时约 **1.51 秒**，临时目录内无输出文件，退出后自动清理。这些数字仅适用于合成探针。诊断环境的入口是 [LoRA Python 解释器](C:/Users/l_len/Documents/ChatGPT/UNNC_NLP/.venvs/lora_api_probe/Scripts/python.exe)。
+
+课程 Issue Sheet 的 Amber 条款将 AI 编程协助限定在调试、语法支持和 API 解释等范围。当前项目尚无学生编写的 06/07 初稿，因此**本轮没有创建正式 Notebook，也没有执行 Full Pool 或 Test**。LoRA 的 Validation 指标、正式训练耗时、峰值显存以及 Notebook 的独立运行验收均待完成。项目文件检查没有发现新增或变化。  
+:codex-file-citation{path="C:/study/UNNC/PHD/PHD1/NLP/CW/requirement/COMP4153-Coursework1 Issue Sheet.pdf" purpose="source"}
+
+我从 02–05 保存的 **Full Pool Validation** 输出核对了以下结果：
+
+| Method | BANKING77 Accuracy | BANKING77 Macro-F1 | CLINC150 Accuracy | CLINC150 Macro-F1 |
+|---|---:|---:|---:|---:|
+| SetFit | 86.50% | 0.856228 | 92.87% | 0.928094 |
+| FastFit | 87.80% | 0.874863 | 94.07% | 0.939824 |
+| LoRA | 待运行 | 待运行 | 待运行 | 待运行 |
+
+SetFit 使用 MiniLM，FastFit 使用 RoBERTa-base。两者的训练目标、训练预算和依赖版本也不同，分数差异无法单独归因到某一项。 [02](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/02_setfit_banking77_pilot.ipynb) · [03](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/03_setfit_clinic150.ipynb) · [04](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/04_fastfit_banking77.ipynb) · [05](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/05_fastfit_clinc150.ipynb)
+
+现有证据支持继续调查两个现象：
+
+- **BANKING77 中，共享主题的意图容易混淆。** FastFit 将 `verify_my_identity` 判为 `why_verify_identity` 7 次，将卡支付汇率问题判成取现汇率问题 5 次。已保存的逐类摘要中，`card_acceptance` 的 F1 为 0.615，但只有 6 条验证样本。适合先结合类别支持数做人工复核，区分模型错误、话语本身含糊和可能的标签问题。已有研究报告过 BANKING77 的潜在标签噪声。 [04 错误分析](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/04_fastfit_banking77.ipynb) · [Label Errors in BANKING77](https://aclanthology.org/2022.insights-1.19/)
+- **CLINC150 中，角色和动作方向容易混淆。** `user_name → what_is_your_name` 有 13 次，反向有 5 次，`change_language` 与 `translate` 也有双向错例。可以检验这些类别对在不同模型和训练预算下是否持续出现。类别文本、细粒度混淆和少样本训练已有相关研究，当前证据还不足以确立新的研究缺口。 [05 错误分析](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/05_fastfit_clinc150.ipynb) · [AncSetFit](https://aclanthology.org/2023.emnlp-main.692/) · [细粒度意图混淆研究](https://aclanthology.org/2025.coling-main.151/) · [少样本意图分类研究](https://aclanthology.org/2023.findings-acl.706/)
+
+
+
+
+
+
+
+| 候选 | 复现可行性与风险 |
+|---|---|
+| **IA³，NeurIPS 2022** | 用可训练向量缩放激活，机制与 LoRA 的低秩更新不同，但同属 PEFT。已安装的 PEFT 0.13.2 自带 RoBERTa 映射，适合优先做低成本可行性检查。若采用 RoBERTa 分类头，应写明是 IA³ 的 encoder 适配。 [原论文](https://proceedings.neurips.cc/paper_files/paper/2022/hash/0cde695b83bd186c1fd456302888454c-Abstract-Conference.html) · [官方实现](https://huggingface.co/docs/peft/package_reference/ia3) |
+| **Episodic cross-encoder，EACL 2023** | 联合编码话语与支持样本，在 episode 内学习相似度，方法差异最明显。作者代码基于 Python 3.6.8 / CUDA 11.1，两个数据集的现代环境适配与推理预算待核验。仓库的许可证标记与 README 表述不一致，复用前应核清。 [原论文](https://aclanthology.org/2023.eacl-main.135/) · [作者代码](https://github.com/UKPLab/eacl2023-few-shot-intent-classification) |
+| **DFT++，Findings of ACL 2023** | 上下文增强与顺序自蒸馏提供另一种方法。作者脚本含 GPT-J 和旧版 Transformers 依赖，Full Pool 的显存与耗时压力最高。原仓库增强缓存的来源需核实，避免带入本项目的 Validation 或 Test 样本。代码复用许可也待确认。 [原论文](https://aclanthology.org/2023.findings-acl.706/) · [作者代码](https://github.com/hdzhang-code/DFTPlus) |
+
+三项均完成论文与代码来源初筛，尚未在本机试跑。建议先衡量课程是否接受 **IA³ 为另一种 PEFT 方法**，并优先调查 episodic cross-encoder 能否在两个数据集上按统一预算运行。DFT++ 保留为备选。本轮未创建第四或第五种方法的 Notebook。
+
+**Proposed Method｜目前可确认的是部分类别对反复混淆。** 在同一 BANKING77 Validation 中，`verify_my_identity → why_verify_identity` 在 FastFit 中出现 **7 次**，LoRA 中出现 **6 次**。`card_arrival` 与 `card_delivery_estimate` 也出现在两者的错误表中，主要方向相反。CLINC150 的 FastFit 输出里，`user_name → what_is_your_name` 有 **13 次**，反向 **5 次**。02/03 保存的只有汇总指标和错误总数，因此当前无法判断 SetFit 是否也错在同一对意图或同一条样本。 [04 错误分析](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/04_fastfit_banking77.ipynb) · [05 错误分析](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/05_fastfit_clinc150.ipynb) · [06 错误分析](C:/study/UNNC/PHD/PHD1/NLP/CW/COMP4153_CW1/notebooks/06_LoRA_banking77.ipynb)
+
+标签歧义、验证样本数偏少、语境不足和训练预算差异都仍是可能解释。已有论文研究过 BANKING77 标签噪声、类别文本锚定和相似意图区分。下一步可按 Validation Source ID 对齐预测，报告类别支持数和双向混淆率，再盲审少量典型话语。若你选择研究**数据效率**，再做同协议的 4/8/16-shot 曲线。若选择研究**标签语义**，先固定训练预算，再做有无该组件的对照。 [BANKING77 标签错误研究](https://aclanthology.org/2022.insights-1.19/) · [AncSetFit](https://aclanthology.org/2023.emnlp-main.692/) · [相似意图研究](https://aclanthology.org/2025.coling-main.151/)
+
